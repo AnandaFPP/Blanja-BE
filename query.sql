@@ -24,7 +24,7 @@ CREATE TABLE category (
     PRIMARY KEY(id)
 );
 
-CREATE TABLE product(
+CREATE TABLE products(
     id VARCHAR(),
     name VARCHAR NOT NULL,
     stock INT NOT NULL,
