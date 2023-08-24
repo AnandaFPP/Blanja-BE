@@ -9,8 +9,9 @@ const {
   searchProduct,
 } = require("../models/products");
 // const client = require('../config/redis')
-
 const commonHelper = require("../helper/common");
+const cloudinary = require('../middleware/cloudinary');
+const { v4: uuidv4 } = require("uuid");
 
 let productController = {
   getAllProduct: async (req, res) => {
@@ -52,7 +53,7 @@ let productController = {
     }
   },
   getDetailProduct: async (req, res) => {
-    const id = Number(req.params.id);
+    const id = String(req.params.id);
     const { rowCount } = await findIdProduct(id);
     if (!rowCount) {
       return res.json({ message: "ID is not found" });
@@ -68,46 +69,51 @@ let productController = {
     )
   },
   createProduct: async (req, res) => {
-    const PORT = process.env.PORT || 8000;
-    const PGHOST = process.env.PGHOST || "localhost";
-    const photo = req.file.filename;
     const { name, stock, price, description } = req.body;
-    const {
-      rows: [count],
-    } = await countData();
-    const id = Number(count.count) + 1;
-
-    const data = {
-      id,
+    let photo = null;
+      if (req.file) {
+        const result = await cloudinary.uploader.upload(req.file.path);
+        photo = result.secure_url;
+      }
+      
+      const id = uuidv4();
+      
+      const data = {
+        id,
       name,
       stock,
       price,
-      photo: `http://${PGHOST}:${PORT}/img/${photo}`,
+      photo,
       description,
     };
+    console.log(data)
     insertProduct(data)
       .then((result) =>
-        commonHelper.response(res, result.rows, 201, "Product created")
+        commonHelper.response(res, result.rows, 200, "Product created")
       )
       .catch((err) => res.send(err));
   },
   updateProduct: async (req, res) => {
     try{
-      const PORT = process.env.PORT || 8000
-      const PGHOST = process.env.PGHOST || 'localhost'
-      const id = Number(req.params.id)
-      const photo = req.file.filename;
+      const id = String(req.params.id);
       const { name,stock,price,description } = req.body
+      let photo = null;
+      if (req.file) {
+        const result = await cloudinary.uploader.upload(req.file.path);
+        photo = result.secure_url;
+      }
+
       const {rowCount} = await findIdProduct(id)
       if(!rowCount){
         return next(createError(403,"ID is Not Found"))
       }
+
       const data ={
         id,
         name,
         stock,
         price,
-        photo:`http://${PGHOST}:${PORT}/img/${photo}`,
+        photo,
         description
       }
       updateProduct(data)
@@ -121,7 +127,7 @@ let productController = {
         }
   },
   deleteProduct: async (req, res) => {
-    let id = Number(req.params.id);
+    let id = String(req.params.id);
     const { rowCount } = await findIdProduct(id);
     if (!rowCount) {
       return res.json({ message: "ID is not found" });

@@ -9,14 +9,14 @@ const selectProduct = (id) => {
 }
 const insertProduct = (data) => {
   const { id,name,stock,price,photo,description } = data
-  return Pool.query(`INSERT INTO products(id, name, stock, price, photo, description) VALUES(${id}, '${name}', ${stock}, ${price}, '${photo}', '${description}')`)
+  return Pool.query(`INSERT INTO products(id, name, stock, price, photo, description) VALUES('${id}', '${name}', ${stock}, ${price}, '${photo}', '${description}')`)
 }
 const updateProduct = (data) => {
   const { id, name, stock, price, photo, description } = data
   return Pool.query(`UPDATE products SET name = '${name}', stock = ${stock}, price = ${price} , photo = '${photo}' , description = '${description}' WHERE id = '${id}'`)
 }
 const deleteProduct = (id) => {
-  return Pool.query(`DELETE FROM products WHERE id = ${id}`)
+  return Pool.query(`DELETE FROM products WHERE id = '${id}'`)
 }
 
 const countData = () =>{
@@ -25,7 +25,7 @@ const countData = () =>{
 
 const findIdProduct =(id)=>{
   return  new Promise ((resolve,reject)=> 
-  Pool.query(`SELECT id FROM products WHERE id = ${id}`,(err,res)=>{
+  Pool.query(`SELECT id FROM products WHERE id = '${id}'`,(err,res)=>{
     if(!err){
       resolve(res)
     }else{
