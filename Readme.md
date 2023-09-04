@@ -104,8 +104,8 @@ API endpoint list are also available as published postman documentation
 
 :rocket: [`Backend Blanja`](https://github.com/AnandaFPP/Blanja-BE)
 
-:rocket: [`Frontend Blanja`](https://github.com/izaazwaskito/Blanja-FE)
+:rocket: [`Frontend Blanja`](https://github.com/AnandaFPP/Blanja-FE)
 
 :rocket: [`Demo Blanja`](https://blanja-fe-khaki.vercel.app/)
 
-Project link : [https://github.com/AnandaFPP/Blanja-BE](https://github.com/AnandaFPP/Blanja-BE))
+Project link : [https://github.com/AnandaFPP/Blanja-BE](https://github.com/AnandaFPP/Blanja-BE)
