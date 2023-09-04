@@ -20,7 +20,7 @@ let productController = {
       const page = Number(req.query.page) || 1;
       const limit = Number(req.query.limit) || 10;
       const offset = (page - 1) * limit;
-      const sortby = req.query.sortby || "id";
+      const sortby = req.query.sortby || "product_name";
       const sort = req.query.sort || "ASC";
       const search = req.query.search || "";
       const result = await selectAllProduct({
@@ -53,12 +53,12 @@ let productController = {
     }
   },
   getDetailProduct: async (req, res) => {
-    const id = String(req.params.id);
-    const { rowCount } = await findIdProduct(id);
+    const product_id = String(req.params.id);
+    const { rowCount } = await findIdProduct(product_id);
     if (!rowCount) {
       return res.json({ message: "ID is not found" });
     }
-    selectProduct(id)
+    selectProduct(product_id)
     .then(
       result => {
       // client.setEx(`products/${id}`,60*60,JSON.stringify(result.rows))
@@ -69,22 +69,24 @@ let productController = {
     )
   },
   createProduct: async (req, res) => {
-    const { name, stock, price, description } = req.body;
-    let photo = null;
+    const { category_id, product_name, product_stock, product_price, product_description } = req.body;
+
+    let product_image = null;
       if (req.file) {
         const result = await cloudinary.uploader.upload(req.file.path);
-        photo = result.secure_url;
+        product_image = result.secure_url;
       }
       
-      const id = uuidv4();
+      const product_id = uuidv4();
       
       const data = {
-        id,
-      name,
-      stock,
-      price,
-      photo,
-      description,
+      product_id,
+      category_id,
+      product_name,
+      product_stock,
+      product_price,
+      product_image,
+      product_description,
     };
     console.log(data)
     insertProduct(data)
@@ -95,26 +97,26 @@ let productController = {
   },
   updateProduct: async (req, res) => {
     try{
-      const id = String(req.params.id);
-      const { name,stock,price,description } = req.body
-      let photo = null;
+      const product_id = String(req.params.id);
+      const { product_name, product_stock, product_price, product_description } = req.body
+      let product_image = null;
       if (req.file) {
         const result = await cloudinary.uploader.upload(req.file.path);
-        photo = result.secure_url;
+        product_image = result.secure_url;
       }
 
-      const {rowCount} = await findIdProduct(id)
+      const {rowCount} = await findIdProduct(product_id)
       if(!rowCount){
         return next(createError(403,"ID is Not Found"))
       }
 
       const data ={
-        id,
-        name,
-        stock,
-        price,
-        photo,
-        description
+        product_id,
+        product_name,
+        product_stock,
+        product_price,
+        product_image,
+        product_description
       }
       updateProduct(data)
         .then(

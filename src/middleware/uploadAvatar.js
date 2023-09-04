@@ -27,8 +27,8 @@ const multerUpload = multer({
   },
 });
 
-const uploadProduct = (req, res, next) => {
-  const multerSingle = multerUpload.single("product_image");
+const uploadAvatar = (req, res, next) => {
+  const multerSingle = multerUpload.single("avatar");
   multerSingle(req, res, (err) => {
     if (err) {
       failed(res, {
@@ -43,4 +43,4 @@ const uploadProduct = (req, res, next) => {
   });
 };
 
-module.exports = uploadProduct;
+module.exports = uploadAvatar;

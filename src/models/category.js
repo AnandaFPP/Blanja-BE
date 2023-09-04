@@ -4,30 +4,29 @@ const Pool = require('../config/db')
 const selectAllCategory = ({limit,offset,sort,sortby}) => {
   return Pool.query(`SELECT * FROM category ORDER BY ${sortby} ${sort} LIMIT ${limit} OFFSET ${offset}`)
 }
-const selectCategory = (id) => {
-  return Pool.query(`SELECT * FROM category WHERE id = ${id}`)
+const selectCategory = (category_id) => {
+  return Pool.query(`SELECT * FROM category WHERE category_id = ${category_id}`)
 }
 const insertCategory = (data) => {
-  const {id, name, image} = data
+  const {category_id, category_name} = data
   const date = new Date().toISOString()
-  return Pool.query(`INSERT INTO category(id, name, image, created_at) VALUES(${id}, '${name}', '${image}', '${date}')`)
+  return Pool.query(`INSERT INTO category(category_id, category_name) VALUES(${category_id}, '${category_name}')`)
 }
 const updateCategory = (data) => {
-  const { id, name, image} = data
-  const date = new Date().toISOString()
-  return Pool.query(`UPDATE category SET name = '${name}', image = '${image}', created_at = '${date}' WHERE id = ${id}`)
+  const { category_id, category_name } = data
+  return Pool.query(`UPDATE category SET category_name = '${category_name}' WHERE category_id = ${category_id}`)
 }
-const deleteCategory = (id) => {
-  return Pool.query(`DELETE FROM category WHERE id = ${id}`)
+const deleteCategory = (category_id) => {
+  return Pool.query(`DELETE FROM category WHERE category_id = ${category_id}`)
 }
 
 const countCategory = () =>{
   return Pool.query('SELECT COUNT(*) FROM category')
 }
 
-const findIdCategory =(id)=>{
+const findIdCategory =(category_id)=>{
   return  new Promise ((resolve,reject)=> 
-  Pool.query(`SELECT id FROM category WHERE id = ${id}`,(err,res)=>{
+  Pool.query(`SELECT category_id FROM category WHERE category_id = ${category_id}`,(err,res)=>{
     if(!err){
       resolve(res)
     }else{
@@ -37,8 +36,8 @@ const findIdCategory =(id)=>{
   )
 }
 
-const searchCategory = (name) => {
-   return Pool.query(`SELECT * FROM category WHERE name ILIKE '%${name}%'`)
+const searchCategory = (category_name) => {
+   return Pool.query(`SELECT * FROM category WHERE category_name ILIKE '%${category_name}%'`)
   }
 
 module.exports = {
