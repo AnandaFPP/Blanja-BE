@@ -8,9 +8,39 @@ const selectAllCustomer = ({ limit, offset, sort, sortby }) => {
 };
 
 const createCustomer = (data) => {
-  const {customer_id, customer_name, customer_email, passwordHash} = data
-  return Pool.query(`INSERT INTO customer(customer_id, customer_name, customer_email, customer_pass) VALUES('${customer_id}', '${customer_name}', '${customer_email}', '${passwordHash}')`)
+  const {customer_id, customer_name, customer_email, passwordHash, verify,} = data
+  return Pool.query(`INSERT INTO customer(customer_id, customer_name, customer_email, customer_pass, verify) VALUES('${customer_id}', '${customer_name}', '${customer_email}', '${passwordHash}', '${verify}')`)
 }
+
+const createUsersVerification = (customer_verification_id, customer_id, token) => {
+  return Pool.query(
+    `insert into customer_verification ( id , customer_id , token ) values ( '${customer_verification_id}' , '${customer_id}' , '${token}' )`
+  );
+};
+
+const checkUsersVerification = (queryUsersId, queryToken) => {
+  return Pool.query(
+    `select * from customer_verification where customer_id='${queryUsersId}' and token = '${queryToken}' `
+  );
+};
+
+const cekUser = (customer_email) => {
+  return Pool.query(
+    `select verify from customer where customer_email = '${customer_email}' `
+  );
+};
+
+const deleteUsersVerification = (queryUsersId, queryToken) => {
+  return Pool.query(
+    `delete from customer_verification  where customer_id='${queryUsersId}' and token = '${queryToken}' `
+  );
+};
+
+const updateAccountVerification = (queryUsersId) => {
+  return Pool.query(
+    `update customer set verify='true' where customer_id='${queryUsersId}' `
+  );
+};
 
 const selectCustomer = (customer_id) => {
   return Pool.query(`SELECT * FROM customer WHERE customer_id = '${customer_id}'`)
@@ -39,7 +69,7 @@ const findEmail =(customer_email)=>{
 
 const findIdCustomer =(customer_id)=>{
   return  new Promise ((resolve,reject)=> 
-  Pool.query(`SELECT FROM customer WHERE customer_id ='${customer_id}'`,(err,res)=>{
+  Pool.query(`SELECT * FROM customer WHERE customer_id ='${customer_id}'`,(err,res)=>{
     if(!err){
       resolve(res)
     }else{
@@ -75,5 +105,10 @@ module.exports = {
   findSkills,
   updateCustomer,
   countCustomer,
-  deleteCustomer
+  deleteCustomer,
+  createUsersVerification,
+  checkUsersVerification,
+  cekUser,
+  updateAccountVerification,
+  deleteUsersVerification,
 }

@@ -7,6 +7,7 @@ const uploadAvatar = require("../middleware/uploadAvatar");
 router
   .post("/register", customerController.registerCustomer)
   .post("/login", customerController.loginCustomer)
+  .get("/verify", customerController.VerifyAccount)
   .get("/", customerController.getAllCustomer)
   .get("/profile/:id", customerController.getDetailCustomer)
   .put("/profile/:id", uploadAvatar, customerController.updateCustomer)
