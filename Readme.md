@@ -36,7 +36,7 @@ With all the features and security provided, Blanja is expected to provide a saf
 
 These are the libraries and service used for building this backend API
 
-- [Node.js](https://nodejs.org)
+- [NodeJS](https://nodejs.org)
 - [Express](https://expressjs.com)
 - [PostgreSQL](https://www.postgresql.org)
 - [Json Web Token](https://jwt.io)
